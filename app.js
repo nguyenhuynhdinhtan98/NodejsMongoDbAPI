@@ -1,15 +1,15 @@
+require("./Models/UserSchema");
 const express = require("express");
 const mongoose = require("mongoose");
-const BodyParser = require("body-parser");
 const router = require("./authRoutes");
-const app = express();
+var bodyParser = require("body-parser");
+var app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(router);
-app.use(BodyParser.json());
-app.use(BodyParser.urlencoded({ extended: true }));
 const uri =
   "mongodb+srv://sa:sapassword@cluster0-zyhfa.mongodb.net/test?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
-
 mongoose.connection.on("connected", () => {
   console.log("Connect");
 });
