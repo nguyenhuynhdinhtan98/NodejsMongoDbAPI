@@ -2,6 +2,7 @@ require("./Models/UserSchema");
 const express = require("express");
 const mongoose = require("mongoose");
 const router = require("./authRoutes");
+const requireAuth = require("./requireAuth");
 var bodyParser = require("body-parser");
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -16,9 +17,8 @@ mongoose.connection.on("connected", () => {
 mongoose.connection.on("error", err => {
   console.log("Err :", err);
 });
-app.get("/", (req, res) => {
-  res.send("Start");
+app.get("/", requireAuth, (req, res) => {
+  res.send(`Start ${req.user.email}`);
 });
-app.listen(3000, function() {
-  console.log("info", "Server is running at port : " + 3000);
-});
+
+app.listen(3000);
