@@ -14,4 +14,19 @@ router.post("/login", async (req, res) => {
     res.send(error.message);
   }
 });
+router.post("/signin", async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(401).send("Email not found");
+  } else {
+    user.comparePassword(password, function(err, isMatch) {
+      if (err) {
+        return res.status(401).send("Inavalid Email and Password");
+      } else {
+        return console.log("Connect Sucess", isMatch);
+      }
+    });
+  }
+});
 module.exports = router;
