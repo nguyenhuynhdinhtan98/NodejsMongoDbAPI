@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 var jwt = require("jsonwebtoken");
 const router = express.Router();
 const User = mongoose.model("User");
-router.post("/login", async (req, res) => {
+router.post("/signup", async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = new User({ email, password });
@@ -24,7 +24,8 @@ router.post("/signin", async (req, res) => {
       if (err) {
         return res.status(401).send("Inavalid Email and Password");
       } else {
-        return console.log("Connect Sucess", isMatch);
+        const token = jwt.sign({ userId: user._id }, 'MY_SECRET_KEY');
+		res.send({ token });
       }
     });
   }
